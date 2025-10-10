@@ -25,4 +25,12 @@ android {
 
 dependencies {
     implementation project(':FtcRobotController')
+    // FTCLib's vision is no longer supported in SolversLib
+    implementation "org.solverslib:core:0.3.2" // add SolversLib core
+}
+
+repositories {
+    maven {
+        url "https://repo.dairy.foundation/releases"
+    }
 }
