@@ -33,6 +33,8 @@ public class RotateToHeading extends CommandBase {
         double pidOutput = pid.calculate(
                 drivetrainSubsystem.getHeading()  // the measured value
         );
+        //squareInput(xSupplier.getAsDouble())
+        //squareInput(ySupplier.getAsDouble())
         drivetrainSubsystem.drive(
                 squareInput(xSupplier.getAsDouble()),
                 squareInput(ySupplier.getAsDouble()),
@@ -40,12 +42,11 @@ public class RotateToHeading extends CommandBase {
                 false
         );
     }
-    private double squareInput(double input) {
-        return Math.copySign(2, input);
-    }
-
     @Override
     public void end(boolean interrupted) {
         drivetrainSubsystem.stop();
+    }
+    private double squareInput(double input) {
+        return Math.copySign(input*input, input);
     }
 }
