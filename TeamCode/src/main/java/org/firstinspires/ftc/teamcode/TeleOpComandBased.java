@@ -4,18 +4,16 @@ import static org.firstinspires.ftc.teamcode.Constants.ShooterConstants.*;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.FunctionalCommand;
-import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.StartEndCommand;
 import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
+import org.firstinspires.ftc.teamcode.Commands.DrivetrainCommand;
 import org.firstinspires.ftc.teamcode.Commands.RecycleCommand;
-import org.firstinspires.ftc.teamcode.Commands.RotateToHeading;
 import org.firstinspires.ftc.teamcode.Subsystems.DrivetrainSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.IntakeSubsystem;
-import org.firstinspires.ftc.teamcode.Subsystems.PedroDriveSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 
 @TeleOp
@@ -24,25 +22,26 @@ public class TeleOpComandBased extends CommandOpMode {
     @Override
     public void initialize() {
         //create subystems
-        PedroDriveSubsystem pedroDriveSubsystem = new PedroDriveSubsystem(hardwareMap);
+        DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem(hardwareMap);
         ShooterSubsystem shooterSubsystem = new ShooterSubsystem(hardwareMap);
         IntakeSubsystem intakeSubsystem = new IntakeSubsystem(hardwareMap);
         RecycleCommand recycleCommand = new RecycleCommand(shooterSubsystem, intakeSubsystem);
-        //run drive command
-        FunctionalCommand teleOpDrive = new FunctionalCommand(pedroDriveSubsystem::startTeleop,
-                () -> pedroDriveSubsystem.drive(
-                        -gamepad1.left_stick_y, // Stick up is negative but moves +X, so invert
-                        -gamepad1.left_stick_x, // Stick left is negative but moves +Y, so invert
-                        -gamepad1.right_stick_x), // Stick left is negative but moves +rotation, so invert
-                (b) -> pedroDriveSubsystem.stop(),
-                () -> false,
-                pedroDriveSubsystem);
 
-        register(pedroDriveSubsystem);
+        //create drive command
+        DrivetrainCommand teleOpDrive = new DrivetrainCommand(
+                drivetrainSubsystem,
+                ()-> -gamepad1.left_stick_x,
+                ()-> -gamepad1.left_stick_y,
+                ()-> -gamepad1.right_stick_x
+        );
+
+        //register subystems
+        register(drivetrainSubsystem);
         register(shooterSubsystem);
         register(intakeSubsystem);
 
-        pedroDriveSubsystem.setDefaultCommand(teleOpDrive);
+        //run drivetrain
+        drivetrainSubsystem.setDefaultCommand(teleOpDrive);
 
         //bind buttons to commands
         GamepadEx gamepadEx1 = new GamepadEx(gamepad1);
@@ -71,7 +70,7 @@ public class TeleOpComandBased extends CommandOpMode {
             telemetry.addData("x-axis", -gamepad1.left_stick_x);
             telemetry.addData("x-right-axis", -gamepad1.right_stick_x);
             shooterSubsystem.telemetrize(telemetry);
-            pedroDriveSubsystem.telemetrize(telemetry);
+            drivetrainSubsystem.telemetrize(telemetry);
             telemetry.update();
         });
         schedule(telemetryCommand);
