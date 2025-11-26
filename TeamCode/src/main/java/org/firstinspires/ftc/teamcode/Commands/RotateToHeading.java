@@ -30,7 +30,7 @@ public class RotateToHeading extends CommandBase {
 
     @Override
     public void execute() {
-        /*double pidOutput = pid.calculate(
+        double pidOutput = pid.calculate(
                 drivetrainSubsystem.getHeading()  // the measured value
         );
         //squareInput(xSupplier.getAsDouble())
@@ -39,7 +39,7 @@ public class RotateToHeading extends CommandBase {
                 squareInput(xSupplier.getAsDouble()),
                 squareInput(ySupplier.getAsDouble()),
                 pidOutput
-        );*/
+        );
     }
     @Override
     public void end(boolean interrupted) {

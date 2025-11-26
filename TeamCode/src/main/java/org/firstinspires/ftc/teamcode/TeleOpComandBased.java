@@ -30,8 +30,8 @@ public class TeleOpComandBased extends CommandOpMode {
         //create drive command
         DrivetrainCommand teleOpDrive = new DrivetrainCommand(
                 drivetrainSubsystem,
-                ()-> -gamepad1.left_stick_x,
                 ()-> -gamepad1.left_stick_y,
+                ()-> -gamepad1.left_stick_x,
                 ()-> -gamepad1.right_stick_x
         );
 
@@ -63,6 +63,10 @@ public class TeleOpComandBased extends CommandOpMode {
         );
         //recycle ball
         gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(recycleCommand);
+        //pedroPathing path testing
+        gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenHeld(
+                new StartEndCommand(drivetrainSubsystem::goToPose, drivetrainSubsystem::stop, drivetrainSubsystem)
+        );
 
         //do telemetry
         RunCommand telemetryCommand = new RunCommand( ()-> {

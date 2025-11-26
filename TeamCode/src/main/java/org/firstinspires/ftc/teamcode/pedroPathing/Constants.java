@@ -30,7 +30,7 @@ public class Constants {
             .hardwareMapName("sparkfunOTOS")
             .linearUnit(DistanceUnit.INCH)
             .angleUnit(AngleUnit.RADIANS)
-            .offset(new SparkFunOTOS.Pose2D(0,0,Math.PI));
+            .offset(new SparkFunOTOS.Pose2D(0,0,(3*Math.PI)/2));
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
